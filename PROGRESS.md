@@ -6,34 +6,21 @@
 
 ## 2026-11-16: implementation plan
 
-Done:
-- Wrote `.claude/plans/toolkit-setup.md`: 22 tasks covering ROADMAP milestones 1-4. Open questions 1-3 are checked early: q3 in Task 2 (lint setup), q1-2 in Task 6 on a throwaway `scratch` package, before any port.
-- Re-checked npm versions; all match the handoff. Added `oxlint-tsgolint` 7.0.2007, `happy-dom` 21.0.4, `publint` 0.3.25, `@arethetypeswrong/cli` 0.18.5, `@changesets/changelog-github` 1.0.1, `@types/node` 24.19.2 (root config files only).
-- Ran the boilerplate oxlint config over the sources (read-only). Boilerplate utils are clean. Expedia and reactivity have 58 curly errors, 52 `no-explicit-any` and 67 `no-underscore-dangle` warnings, which `--deny-warnings` blocks.
-- Three user calls recorded in DECISIONS.md: `no-underscore-dangle` allows `this._x`; reactivity has a single root export; storage adapts to `watch`/`get`/`set` (open question 4 closed).
-- The local folder is now `toolkit-monorepo`, not `front-end-kit`.
-
-Blocked: plan review.
-
-Next:
-- Review the plan, including the two items it flags for your OK: `pnpm format` / `oxlint --fix` rewriting ported files, and `@types/node` for root config files.
-- Run it with `/execute-plan .claude/plans/toolkit-setup.md`.
+Wrote `.claude/plans/toolkit-setup.md`: 22 tasks for ROADMAP milestones 1-4. Re-checked npm versions and added the tooling deps. Dry-ran the boilerplate oxlint config over the sources. Three user calls went to DECISIONS.md: `no-underscore-dangle` allows `this._x`, reactivity has a single root export, storage adapts to `watch`/`get`/`set`. detail: ecac8a4
 
 ## 2026-11-16: plan run (Tasks 1-21)
 
-Done:
-- Milestone 1: root workspace, type-aware oxlint + oxfmt, git hooks + commitlint, Vitest projects, tsdown base + template + `pnpm new`, Astro playground. Gate `pnpm lint && pnpm format:check && pnpm typecheck && pnpm test && pnpm build` exits 0.
-- Open questions 1-3 answered yes and removed from DECISIONS.md: tsgolint 7.0.2007 runs on TS 7.0.2; tsdown rewrites `#*` to relative `.js` paths in `.js` and `.d.ts`; the packed tarball exports only `dist/`.
-- Milestone 2: `@dakumisu/reactivity` ported, three bugs fixed with Vitest checks (fail before, pass after), README rewritten against the code, playground page.
-- Milestone 3: `@dakumisu/utils` with 11 subpaths, no third-party deps; storage and `async/queue` run on reactivity, queue ticks on `requestAnimationFrame`. 24 tests pass. publint + attw clean for both packages; tarballs hold only `dist/`, `package.json`, `README.md`, `LICENSE`.
-- Milestone 4 (code side): Changesets 3 config and scripts; `.github/workflows/ci.yml` with `check` and OIDC `release` jobs. `changeset publish` uses `pnpm publish` in a pnpm workspace (`@changesets/cli` `getPublishPlan.mjs:569-577`), so pnpm does the OIDC exchange and provenance.
-- User calls: shell formatter/fixer may rewrite ported files; `@types/node` for root config only; oxfmt skips the root docs (it rewrites `*(user)*`); test files turn `no-underscore-dangle` off.
-- Small calls are noted under each task in `.claude/plans/toolkit-setup.md` (`Call:` lines). Notable: attw `level: 'error'`; tsdown `define` keeps `process.env.NODE_ENV` in `dist`; template carries empty `exports` keys so a fresh package stays format-clean.
-- TODO.md: 8 new bugs found in the sources (kept, minimal port) and 7 shortcuts with ceilings and fixes.
+Built milestones 1-3 and milestone 4's code: workspace and tooling, `pnpm new`, Astro playground, `@dakumisu/reactivity` (three bugs fixed), `@dakumisu/utils` (11 subpaths), Changesets and CI with an OIDC release job. Gate exits 0 with 24 tests; publint and attw clean. User calls sit in DECISIONS.md §3, small calls as `Call:` lines in the plan, 8 source bugs and 7 shortcuts in TODO.md. detail: 6728bf3
 
-Blocked:
-- Visual checks of the playground pages (index, reactivity, utils) need a browser session (rule 3).
-- The previous entry above is not condensed: PROGRESS.md is uncommitted. Commit it, and the next session condenses both.
+## 2026-11-16: handoff follow-up
+
+Done:
+- Condensed the two entries above; their full logs live in the commits named on each `detail:` line.
+- Playground check in the built-in browser (`pnpm dev`, user OK): index, reactivity and utils render with no console errors. Utils initial outputs are right (mapRange 50 gives 180.0, slugify, lighten); the storage counter survives a reload; the queue reaches `complete`. Not checked: reactivity's Increment button (the pane closed first). The queue took about 20 s for 3 s of fake tasks while the pane was hidden, most likely because `requestAnimationFrame` is throttled there; unconfirmed.
+- User call: plans stay out of git (DECISIONS.md §2).
+- Added `.claude/launch.json` (git-ignored) so the built-in browser can start the playground.
+
+Blocked: Task 22 (user steps below).
 
 Next (Task 22, user steps; Claude runs none of them):
 1. Commit and push milestones 1-4; check that CI `check` passes and `release` does nothing (no changesets).

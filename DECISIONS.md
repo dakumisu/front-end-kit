@@ -49,6 +49,8 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 - ✅ **One root `tsconfig.base.json`** that packages extend.
     - ❌ Publishable `@dakumisu/tsconfig`: extra versioning; revisit if client projects need it.
 - ✅ **Shared tooling lives in root devDependencies; `.nvmrc` 24 and `engines` on the root only.** Published browser packages carry no `engines`.
+- ✅ **Plans stay out of git** *(user, 2026-11-16)*: `.gitignore` keeps `.claude/*`, so `.claude/plans/` and its `Call:` lines live only locally.
+    - ❌ Track plans with `!.claude/plans/` (patch folders still ignored): turned down.
 
 ## 3. Quality
 
