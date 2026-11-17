@@ -15,6 +15,7 @@ import { clamp, damp, mapRange } from '@dakumisu/utils/maths';
 | `round.ts`       | `roundToDecimal`                                                   |
 | `stats.ts`       | `average`, `median`                                                |
 | `random.ts`      | `shuffle`                                                          |
+| `noise.ts`       | `simplex2D`, `Noise2D`                                             |
 
 ## Argument order
 

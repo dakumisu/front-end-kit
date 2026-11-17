@@ -8,3 +8,4 @@ export * from './mod.ts';
 export * from './round.ts';
 export * from './stats.ts';
 export * from './random.ts';
+export * from './noise.ts';
