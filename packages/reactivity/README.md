@@ -78,11 +78,11 @@ area.watch((v) => console.log(v)); // runs after w or h changes, not now
 area.dispose(); // stops listening to w and h
 ```
 
-Pass a single store or a tuple. The callback gets the values in tuple order, typed from the stores.
+Pass a single store or a tuple. The callback always gets a tuple, typed from the stores and in their order. A single store gives a one-element tuple: `computed(w, ([w]) => w * 2)`.
 
 ## `watch`
 
-Watch several stores at once. The callback runs once per tick, in a microtask, with all current values. It does not run at start unless you pass `{ immediate: true }`.
+Watch several stores at once. The callback runs once per tick, in a microtask, with all current values as a tuple (a one-element tuple for a single store). It does not run at start unless you pass `{ immediate: true }`.
 
 ```ts
 const stop = watch([w, h], ([w, h]) => layout(w, h));
