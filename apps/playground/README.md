@@ -31,4 +31,4 @@ Import client-only utils (anything touching `document`, `window`, `CSS`) in a `<
 
 ## Typecheck
 
-`typecheck` checks the `.ts` files only. The `.astro` files are not typechecked yet (see `TODO.md`).
+`typecheck` checks the `.ts` files only. The `.astro` files are not typechecked yet: `@astrojs/check` does not run on TypeScript 7.

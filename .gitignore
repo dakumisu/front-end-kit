@@ -6,3 +6,8 @@ dist
 .claude/*
 !.claude/settings.json
 !.claude/skills/
+/DECISIONS.md
+/DECISIONS-DETAILS.md
+/PROGRESS.md
+/TODO.md
+/ROADMAP.md
