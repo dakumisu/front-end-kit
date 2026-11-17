@@ -19,5 +19,6 @@ No root export. Import from a subpath:
 | `@dakumisu/utils/log`          | [`createLogger`, `domLog`](https://github.com/dakumisu/toolkit-monorepo/tree/main/packages/utils/src/log)                                                                       |
 | `@dakumisu/utils/maths`        | [`clamp`, `lerp`, `damp`, `mapRange`, `mod`, `median` and more](https://github.com/dakumisu/toolkit-monorepo/tree/main/packages/utils/src/maths)                                |
 | `@dakumisu/utils/object`       | [`dlv`, `dsv`, `ddv`](https://github.com/dakumisu/toolkit-monorepo/tree/main/packages/utils/src/object)                                                                         |
+| `@dakumisu/utils/pointer`      | [`createFakePointer`](https://github.com/dakumisu/toolkit-monorepo/tree/main/packages/utils/src/pointer) (client only, needs `@dakumisu/reactivity`)                            |
 | `@dakumisu/utils/storage`      | [`useLocalStorage`, `useSessionStorage`, `useStorage`, `useStorageState`](https://github.com/dakumisu/toolkit-monorepo/tree/main/packages/utils/src/storage)                    |
 | `@dakumisu/utils/string`       | [`slugify`, `camelToKebab`, `hash`, `createUUID` and more](https://github.com/dakumisu/toolkit-monorepo/tree/main/packages/utils/src/string)                                    |

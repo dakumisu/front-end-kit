@@ -57,6 +57,10 @@
             "@dakumisu/source": "./src/object/index.ts",
             "default": "./dist/object/index.js"
         },
+        "./pointer": {
+            "@dakumisu/source": "./src/pointer/index.ts",
+            "default": "./dist/pointer/index.js"
+        },
         "./storage": {
             "@dakumisu/source": "./src/storage/index.ts",
             "default": "./dist/storage/index.js"
@@ -78,6 +82,7 @@
             "./log": "./dist/log/index.js",
             "./maths": "./dist/maths/index.js",
             "./object": "./dist/object/index.js",
+            "./pointer": "./dist/pointer/index.js",
             "./storage": "./dist/storage/index.js",
             "./string": "./dist/string/index.js",
             "./package.json": "./package.json"
