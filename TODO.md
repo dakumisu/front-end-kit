@@ -23,3 +23,8 @@ Behavior unchanged on purpose (DECISIONS.md §5). Each line: the bug, then the p
 - `utils/log/README.md`: stale claims (production logging, `ColorInput`, toast sizes, `log` background). Fix: rewrite against the code during the port.
 - `utils/dom/README.md` (boilerplate): lists `elements.ts` / `download.ts`; real files are `nodes.ts` / `blob.ts`. Fix: correct during the port.
 - `utils/dom/nodes.ts`, `dom/setViewportSize.ts`: read `document` / `CSS` at import, so client only and listed in `sideEffects`. Fix if SSR import is ever needed: make them lazy.
+
+## Shortcuts taken in the port
+
+- `reactivity/computed.ts`, `reactivity/watcher.ts`: the tuple-typed overloads of `computed`, `watch` and `createScheduler` call the callback through `Reflect.apply`. A cast from `unknown[]` to the tuple trips `no-unsafe-type-assertion`, and the overloads need a `(values: never) => …` implementation signature. Ceiling: the values are untyped inside the implementation, so a wrong tuple type in an overload goes unnoticed. Fix: restructure the overloads, or allow the rule for these two files in an oxlint `overrides` entry.
+- `reactivity/computed.ts`: the first callback run moved before `super()` (replaces `super(null as T)`). Ceiling: differs only if the callback writes to one of its own stores on that first run. Fix: restore the post-construct `update()` if that case appears.

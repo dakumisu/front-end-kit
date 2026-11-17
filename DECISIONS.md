@@ -63,6 +63,8 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 - ✅ **One deviation: `no-underscore-dangle` allows `this._x`** (`allowAfterThis: true`) *(user)*. Ported reactivity and queue classes keep their `_private` members; 62 of the 67 warnings were `this._x`. The 5 storage locals lose their underscore.
     - ❌ Rename the members: changes names in the published `.d.ts`, bigger than a minimal port.
     - ❌ Rule off: most drift from the boilerplate.
+- ✅ **Test files turn `no-underscore-dangle` off** *(user, 2026-11-16)*. Tests read `_private` state to prove a leak is gone (`computed.dispose`).
+    - ❌ `allow: ['_watchers']`: opens that name to package code too.
 - ✅ **simple-git-hooks: lint-staged on pre-commit, lenient commitlint on commit-msg, typecheck on pre-push.**
 - ✅ **Vitest, one root config with projects; node env by default, happy-dom per file** *(user: Vitest over PHILOSOPHY's no-suite default, because this code is published)*.
     - ❌ `node --test`: no DOM.

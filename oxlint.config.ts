@@ -38,4 +38,8 @@ export default defineConfig({
         /* Disable comments must name the rules they turn off */
         'unicorn/no-abusive-eslint-disable': 'error',
     },
+    overrides: [
+        /* Tests inspect `_private` state to prove leaks are gone */
+        { files: ['**/*.test.ts'], rules: { 'eslint/no-underscore-dangle': 'off' } },
+    ],
 });

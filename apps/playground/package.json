@@ -8,6 +8,7 @@
         "typecheck": "astro sync && tsc --noEmit"
     },
     "dependencies": {
+        "@dakumisu/reactivity": "workspace:^",
         "astro": "catalog:",
         "vite": "catalog:"
     }
