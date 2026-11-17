@@ -12,10 +12,15 @@
         "format:check": "oxfmt --check",
         "test": "vitest run",
         "new": "node scripts/new-package.ts",
+        "changeset": "changeset",
+        "version-packages": "changeset version && pnpm install --lockfile-only",
+        "release": "pnpm build && changeset publish",
         "prepare": "simple-git-hooks"
     },
     "devDependencies": {
         "@arethetypeswrong/cli": "catalog:",
+        "@changesets/changelog-github": "catalog:",
+        "@changesets/cli": "catalog:",
         "@commitlint/cli": "catalog:",
         "@types/node": "catalog:",
         "happy-dom": "catalog:",
