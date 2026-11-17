@@ -63,7 +63,37 @@ import Base from '../layouts/Base.astro';
             <output id="queue-out">idle</output>
         </p>
     </section>
+
+    <section>
+        <h2>pointer: createFakePointer</h2>
+        <div id="pointer-box">
+            <span id="pointer-dot"></span>
+        </div>
+        <p>
+            <button type="button" id="pointer-toggle" disabled>Stop</button>
+            normalized: <output id="pointer-out"></output>
+        </p>
+    </section>
 </Base>
+
+<style>
+    #pointer-box {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        outline: 1px solid currentColor;
+    }
+
+    #pointer-dot {
+        position: absolute;
+        top: -6px;
+        left: -6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+</style>
 
 <script>
     import { writable } from '@dakumisu/reactivity';
@@ -72,6 +102,7 @@ import Base from '../layouts/Base.astro';
     import { lighten } from '@dakumisu/utils/colors';
     import { createLogger, domLog } from '@dakumisu/utils/log';
     import { mapRange } from '@dakumisu/utils/maths';
+    import { createFakePointer } from '@dakumisu/utils/pointer';
     import { useLocalStorage } from '@dakumisu/utils/storage';
     import { slugify } from '@dakumisu/utils/string';
 
@@ -98,6 +129,10 @@ import Base from '../layouts/Base.astro';
     const $queueStart = $<HTMLButtonElement>('#queue-start');
     const $queueProgress = $<HTMLProgressElement>('#queue-progress');
     const $queueOut = $<HTMLOutputElement>('#queue-out');
+    const $pointerBox = $<HTMLDivElement>('#pointer-box');
+    const $pointerDot = $<HTMLSpanElement>('#pointer-dot');
+    const $pointerOut = $<HTMLOutputElement>('#pointer-out');
+    const $pointerToggle = $<HTMLButtonElement>('#pointer-toggle');
 
     const updateRange = () => {
         $rangeOut.value = mapRange(Number($range.value), 0, 100, 0, 360).toFixed(1);
@@ -167,6 +202,31 @@ import Base from '../layouts/Base.astro';
             });
     });
 
+    const fakePointer = createFakePointer({ target: $pointerBox });
+    fakePointer.$pointer.watch(
+        ({ x, y, normalizedX, normalizedY }) => {
+            $pointerDot.style.transform = `translate(${x}px, ${y}px)`;
+            $pointerOut.value = `${normalizedX.toFixed(2)}, ${normalizedY.toFixed(2)}`;
+        },
+        { immediate: true },
+    );
+
+    const updateToggle = () => {
+        $pointerToggle.textContent = fakePointer.isActive() ? 'Stop' : 'Start';
+    };
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        fakePointer.stop();
+    }
+    updateToggle();
+    $pointerToggle.addEventListener('click', () => {
+        if (fakePointer.isActive()) {
+            fakePointer.stop();
+        } else {
+            fakePointer.start();
+        }
+        updateToggle();
+    });
+
     for (const $control of [
         $range,
         $slug,
@@ -176,6 +236,7 @@ import Base from '../layouts/Base.astro';
         $domLog,
         $storedIncrement,
         $queueStart,
+        $pointerToggle,
     ]) {
         $control.disabled = false;
     }
