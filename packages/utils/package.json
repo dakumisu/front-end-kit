@@ -1,0 +1,94 @@
+{
+    "name": "@dakumisu/utils",
+    "version": "0.1.0",
+    "description": "Small front-end utilities",
+    "license": "MIT",
+    "author": "dakumisu",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dakumisu/toolkit-monorepo.git",
+        "directory": "packages/utils"
+    },
+    "files": [
+        "dist"
+    ],
+    "type": "module",
+    "sideEffects": [
+        "./dist/dom/nodes.js",
+        "./dist/dom/setViewportSize.js"
+    ],
+    "imports": {
+        "#*": "./src/*"
+    },
+    "exports": {
+        "./async": {
+            "@dakumisu/source": "./src/async/index.ts",
+            "default": "./dist/async/index.js"
+        },
+        "./async/queue": {
+            "@dakumisu/source": "./src/async/queue.ts",
+            "default": "./dist/async/queue.js"
+        },
+        "./colors": {
+            "@dakumisu/source": "./src/colors/index.ts",
+            "default": "./dist/colors/index.js"
+        },
+        "./convert": {
+            "@dakumisu/source": "./src/convert/index.ts",
+            "default": "./dist/convert/index.js"
+        },
+        "./distribution": {
+            "@dakumisu/source": "./src/distribution/index.ts",
+            "default": "./dist/distribution/index.js"
+        },
+        "./dom": {
+            "@dakumisu/source": "./src/dom/index.ts",
+            "default": "./dist/dom/index.js"
+        },
+        "./log": {
+            "@dakumisu/source": "./src/log/index.ts",
+            "default": "./dist/log/index.js"
+        },
+        "./maths": {
+            "@dakumisu/source": "./src/maths/index.ts",
+            "default": "./dist/maths/index.js"
+        },
+        "./object": {
+            "@dakumisu/source": "./src/object/index.ts",
+            "default": "./dist/object/index.js"
+        },
+        "./storage": {
+            "@dakumisu/source": "./src/storage/index.ts",
+            "default": "./dist/storage/index.js"
+        },
+        "./string": {
+            "@dakumisu/source": "./src/string/index.ts",
+            "default": "./dist/string/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "publishConfig": {
+        "exports": {
+            "./async": "./dist/async/index.js",
+            "./async/queue": "./dist/async/queue.js",
+            "./colors": "./dist/colors/index.js",
+            "./convert": "./dist/convert/index.js",
+            "./distribution": "./dist/distribution/index.js",
+            "./dom": "./dist/dom/index.js",
+            "./log": "./dist/log/index.js",
+            "./maths": "./dist/maths/index.js",
+            "./object": "./dist/object/index.js",
+            "./storage": "./dist/storage/index.js",
+            "./string": "./dist/string/index.js",
+            "./package.json": "./package.json"
+        },
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsdown",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@dakumisu/reactivity": "workspace:^"
+    }
+}

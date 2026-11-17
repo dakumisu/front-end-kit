@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="utils">
+    <h1>@dakumisu/utils</h1>
+
+    <section>
+        <h2>maths: mapRange</h2>
+        <p>
+            <label
+                >Value 0 to 100 <input type="range" id="range" min="0" max="100" value="50" disabled
+            /></label>
+            maps to <output id="range-out">0</output> degrees (0 to 360).
+        </p>
+    </section>
+
+    <section>
+        <h2>string: slugify</h2>
+        <p>
+            <label>Text <input type="text" id="slug" value="L'été à Montréal" disabled /></label>
+            becomes <output id="slug-out"></output>
+        </p>
+    </section>
+
+    <section>
+        <h2>async: debounce</h2>
+        <p>
+            <label>Type here <input type="text" id="debounce" disabled /></label>
+            debounced by 400ms: <output id="debounce-out"></output>
+        </p>
+    </section>
+
+    <section>
+        <h2>colors: lighten</h2>
+        <p>
+            <label>Color <input type="color" id="color" value="#336699" disabled /></label>
+            lightened by 0.5: <output id="color-out"></output>
+        </p>
+    </section>
+
+    <section>
+        <h2>log: createLogger and domLog</h2>
+        <p>
+            <button type="button" id="logger" disabled>Log to console</button>
+            <button type="button" id="dom-log" disabled>Show domLog message</button>
+        </p>
+    </section>
+
+    <section>
+        <h2>storage: synced counter</h2>
+        <p>
+            Count: <output id="stored">0</output> (kept in localStorage, survives a reload)
+            <button type="button" id="stored-increment" disabled>Increment</button>
+        </p>
+    </section>
+
+    <section>
+        <h2>async/queue: fake loading</h2>
+        <p>
+            <button type="button" id="queue-start" disabled>Start queue</button>
+            <progress id="queue-progress" max="1" value="0">0%</progress>
+            <output id="queue-out">idle</output>
+        </p>
+    </section>
+</Base>
+
+<script>
+    import { writable } from '@dakumisu/reactivity';
+    import { debounce } from '@dakumisu/utils/async';
+    import { createQueue } from '@dakumisu/utils/async/queue';
+    import { lighten } from '@dakumisu/utils/colors';
+    import { createLogger, domLog } from '@dakumisu/utils/log';
+    import { mapRange } from '@dakumisu/utils/maths';
+    import { useLocalStorage } from '@dakumisu/utils/storage';
+    import { slugify } from '@dakumisu/utils/string';
+
+    const $ = <T extends Element>(selector: string): T => {
+        const $el = document.querySelector<T>(selector);
+        if (!$el) {
+            throw new Error(`Missing element ${selector}`);
+        }
+        return $el;
+    };
+
+    const $range = $<HTMLInputElement>('#range');
+    const $rangeOut = $<HTMLOutputElement>('#range-out');
+    const $slug = $<HTMLInputElement>('#slug');
+    const $slugOut = $<HTMLOutputElement>('#slug-out');
+    const $debounce = $<HTMLInputElement>('#debounce');
+    const $debounceOut = $<HTMLOutputElement>('#debounce-out');
+    const $color = $<HTMLInputElement>('#color');
+    const $colorOut = $<HTMLOutputElement>('#color-out');
+    const $logger = $<HTMLButtonElement>('#logger');
+    const $domLog = $<HTMLButtonElement>('#dom-log');
+    const $stored = $<HTMLOutputElement>('#stored');
+    const $storedIncrement = $<HTMLButtonElement>('#stored-increment');
+    const $queueStart = $<HTMLButtonElement>('#queue-start');
+    const $queueProgress = $<HTMLProgressElement>('#queue-progress');
+    const $queueOut = $<HTMLOutputElement>('#queue-out');
+
+    const updateRange = () => {
+        $rangeOut.value = mapRange(Number($range.value), 0, 100, 0, 360).toFixed(1);
+    };
+    $range.addEventListener('input', updateRange);
+    updateRange();
+
+    const updateSlug = () => {
+        $slugOut.value = slugify($slug.value);
+    };
+    $slug.addEventListener('input', updateSlug);
+    updateSlug();
+
+    const showDebounced = debounce((value: string) => {
+        $debounceOut.value = value;
+    }, 400);
+    $debounce.addEventListener('input', () => showDebounced($debounce.value));
+
+    const updateColor = () => {
+        $colorOut.value = lighten($color.value, 0.5);
+        $colorOut.style.color = $colorOut.value;
+        $colorOut.style.backgroundColor = $color.value;
+    };
+    $color.addEventListener('input', updateColor);
+    updateColor();
+
+    const logger = createLogger({ id: 'PLAYGROUND' });
+    $logger.addEventListener('click', () => logger.log('Hello from createLogger'));
+    $domLog.addEventListener('click', () => domLog.info('Hello from domLog'));
+
+    const count = useLocalStorage('playground-utils').sync('count', writable(0));
+    count.watch(
+        (value) => {
+            $stored.value = String(value);
+        },
+        { immediate: true },
+    );
+    $storedIncrement.addEventListener('click', () => {
+        count.set(count.get() + 1);
+    });
+
+    $queueStart.addEventListener('click', () => {
+        $queueStart.disabled = true;
+        $queueOut.value = 'loading';
+
+        const queue = createQueue({ id: 'playground' });
+        queue.fakeTask(500).fakeTask(1000).fakeTask(1500);
+        queue.smoothProgress.watch(
+            (value) => {
+                $queueProgress.value = value;
+            },
+            { immediate: true },
+        );
+
+        queue
+            .start()
+            .then(() => queue.complete.promise)
+            .then(() => {
+                $queueOut.value = 'complete';
+            })
+            .catch((error: unknown) => {
+                $queueOut.value = 'failed';
+                domLog.error(error);
+            })
+            .finally(() => {
+                $queueStart.disabled = false;
+            });
+    });
+
+    for (const $control of [
+        $range,
+        $slug,
+        $debounce,
+        $color,
+        $logger,
+        $domLog,
+        $storedIncrement,
+        $queueStart,
+    ]) {
+        $control.disabled = false;
+    }
+</script>

@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "@dakumisu/reactivity": "workspace:^",
+        "@dakumisu/utils": "workspace:^",
         "astro": "catalog:",
         "vite": "catalog:"
     }

@@ -271,6 +271,9 @@ importers:
       '@dakumisu/reactivity':
         specifier: workspace:^
         version: link:../../packages/reactivity
+      '@dakumisu/utils':
+        specifier: workspace:^
+        version: link:../../packages/utils
       astro:
         specifier: 'catalog:'
         version: 7.4.12(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1)
@@ -279,6 +282,12 @@ importers:
         version: 8.3.8(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1)
 
   packages/reactivity: {}
+
+  packages/utils:
+    dependencies:
+      '@dakumisu/reactivity':
+        specifier: workspace:^
+        version: link:../reactivity
 
 packages:
 
