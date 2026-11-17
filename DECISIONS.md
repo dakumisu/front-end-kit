@@ -58,6 +58,9 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
     - ❌ Boilerplate rules only: misses async bugs.
 - ✅ **Rule levels match the boilerplate; `--deny-warnings` in hooks and CI.** Nothing warned ships, config stays aligned.
     - ❌ Promote rules to error: config drifts from boilerplate.
+- ✅ **One deviation: `no-underscore-dangle` allows `this._x`** (`allowAfterThis: true`) *(user)*. Ported reactivity and queue classes keep their `_private` members; 62 of the 67 warnings were `this._x`. The 5 storage locals lose their underscore.
+    - ❌ Rename the members: changes names in the published `.d.ts`, bigger than a minimal port.
+    - ❌ Rule off: most drift from the boilerplate.
 - ✅ **simple-git-hooks: lint-staged on pre-commit, lenient commitlint on commit-msg, typecheck on pre-push.**
 - ✅ **Vitest, one root config with projects; node env by default, happy-dom per file** *(user: Vitest over PHILOSOPHY's no-suite default, because this code is published)*.
     - ❌ `node --test`: no DOM.
@@ -70,8 +73,10 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
     - ❌ Single kit package: breaks `@dakumisu/{id}` naming.
 - ✅ **tsdown writes `exports` from its entry list.** Entries declared once.
     - ❌ Hand-written exports: two places to sync.
-- ✅ **Subpaths only, no root barrel.**
+- ✅ **Grouped packages expose subpaths only, no root barrel.**
     - ❌ Barrel + subpaths: dev-server cost, relies on `sideEffects`.
+- ✅ **A single-purpose package exposes one root export** *(user)*. `@dakumisu/reactivity` imports from `@dakumisu/reactivity`.
+    - ❌ Subpath per file: verbose imports for 7 small, interlinked files.
 - ✅ **Wrapped third-party libs are `peerDependencies`**, optional when only some subpaths need them.
     - ❌ `dependencies`: duplicate copies (two three.js).
     - ❌ Bundled in: bloat.
@@ -96,6 +101,8 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 - ✅ **`@dakumisu/utils` has no third-party deps** *(user)*. `storage` and `queue` run on `@dakumisu/reactivity`; `queue` ticks on `requestAnimationFrame`.
     - ❌ nanostores *(user)*: replaced by own reactivity.
     - ❌ gsap ticker *(user)*.
+- ✅ **storage adapts to reactivity's `watch`/`get`/`set`** *(user)*. `isAtom` checks `watch` + `set`; `subscribe(cb)` becomes `watch(cb, { immediate: true })`, which keeps nanostores' fire-on-subscribe behavior.
+    - ❌ Add `subscribe` to reactivity: widens its API now; interop stays open question 5.
 - ✅ **Port minimally: only edits the checks demand, client bits stripped, behavior unchanged.** Known bugs go to TODO.md.
     - ❌ Refactor during the port: bigger diff to review.
 - ✅ **Exception: fix three reactivity bugs now**, each with a Vitest check: `writable.set(v, true)` double emit, `computed` never unwatching, `signal.unwatch` removing the wrong duplicate. utils now depends on them.
@@ -132,5 +139,4 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 | 1 | Do tsdown 0.23 + TS 7 emit correct `.d.ts` (including `#` subpath imports inside packages)? | Package build |
 | 2 | Does `devExports` + `publishConfig` leave only `dist/` exports in the packed tarball? | First publish |
 | 3 | Does oxlint-tsgolint run with TS 7? | Type-aware lint |
-| 4 | storage's `isAtom` sync expects nanostores' `subscribe`; reactivity stores use `watch`. Which API does storage adapt to? | `@dakumisu/utils/storage` port |
 | 5 | Should reactivity eventually replace or wrap nanostores-style APIs (`subscribe`) for interop? | Nothing yet |
