@@ -1,0 +1,10 @@
+{
+    "extends": "astro/tsconfigs/strict",
+    "compilerOptions": {
+        // Keep in sync with SOURCE_CONDITION in source-condition.ts (JSON cannot import it)
+        "customConditions": ["@dakumisu/source"],
+        "allowImportingTsExtensions": true
+    },
+    "include": [".astro/types.d.ts", "**/*"],
+    "exclude": ["dist"]
+}

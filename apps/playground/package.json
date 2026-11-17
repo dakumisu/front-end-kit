@@ -1,0 +1,14 @@
+{
+    "name": "playground",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "astro dev",
+        "build": "astro build",
+        "typecheck": "astro sync && tsc --noEmit"
+    },
+    "dependencies": {
+        "astro": "catalog:",
+        "vite": "catalog:"
+    }
+}
