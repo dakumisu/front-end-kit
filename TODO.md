@@ -4,6 +4,8 @@
 
 - Scaffold the monorepo per DECISIONS.md, then port `@dakumisu/utils` and `@dakumisu/reactivity`.
 - First publish of each new package by hand, then attach the npm trusted publisher (GitHub Actions, `dakumisu/toolkit-monorepo`).
+- `pnpm-workspace.yaml` `minimumReleaseAgeExclude`: pnpm wrote 40 lines for oxlint/oxfmt versions younger than its release-age gate. Fix: delete the block once those versions are older than the gate; `pnpm install` must still pass.
+- `apps/playground` `.astro` files are not typechecked: `@astrojs/check` needs the TS JS API absent in TS 7. Fix: add `astro check` once it supports TS 7.
 
 ## Known bugs kept by the minimal port
 

@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2023", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        // Keep in sync with SOURCE_CONDITION in source-condition.ts (JSON cannot import it)
+        "customConditions": ["@dakumisu/source"],
+        "strict": true,
+        "isolatedDeclarations": true,
+        "declaration": true,
+        "noEmit": true,
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "types": []
+    }
+}

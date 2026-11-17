@@ -1,0 +1,41 @@
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+    plugins: ['eslint', 'import', 'oxc', 'typescript', 'unicorn'],
+    categories: {
+        correctness: 'error',
+        suspicious: 'warn',
+    },
+    env: { browser: true, node: true },
+    ignorePatterns: [
+        '**/.astro/**',
+        '**/.vercel/**',
+        '**/dist/**',
+        'types/generated-*.d.ts',
+        'vendors/**',
+    ],
+    options: {
+        /* Needs oxlint-tsgolint; catches unawaited promises in published code */
+        typeAware: true,
+        reportUnusedDisableDirectives: 'error',
+    },
+    rules: {
+        'no-new': 'allow',
+        /* Braces around every if/else/loop body, one-liners included */
+        'eslint/curly': ['error', 'all'],
+        'eslint/no-debugger': 'warn',
+        /* Ported classes keep `_private` members */
+        'eslint/no-underscore-dangle': ['warn', { allowAfterThis: true }],
+        'import/no-cycle': 'error',
+        'import/no-duplicates': 'error',
+        /* Stylesheets are imported for their side effect */
+        'import/no-unassigned-import': ['warn', { allow: ['**/*.css'] }],
+        /* Bans `@ts-ignore`; `@ts-expect-error` needs a description */
+        'typescript/ban-ts-comment': 'error',
+        'typescript/no-explicit-any': 'warn',
+        'typescript/no-unused-expressions': 'error',
+        'typescript/no-extraneous-class': 'off',
+        /* Disable comments must name the rules they turn off */
+        'unicorn/no-abusive-eslint-disable': 'error',
+    },
+});

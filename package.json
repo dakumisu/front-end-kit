@@ -1,0 +1,48 @@
+{
+    "name": "toolkit-monorepo",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "pnpm --filter playground dev",
+        "build": "pnpm -r --filter './packages/*' build",
+        "typecheck": "pnpm -r typecheck && tsc --noEmit",
+        "lint": "oxlint --deny-warnings",
+        "lint:fix": "oxlint --fix",
+        "format": "oxfmt",
+        "format:check": "oxfmt --check",
+        "test": "vitest run",
+        "new": "node scripts/new-package.ts",
+        "prepare": "simple-git-hooks"
+    },
+    "devDependencies": {
+        "@arethetypeswrong/cli": "catalog:",
+        "@commitlint/cli": "catalog:",
+        "@types/node": "catalog:",
+        "happy-dom": "catalog:",
+        "lint-staged": "catalog:",
+        "oxfmt": "catalog:",
+        "oxlint": "catalog:",
+        "oxlint-tsgolint": "catalog:",
+        "publint": "catalog:",
+        "simple-git-hooks": "catalog:",
+        "tsdown": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "pnpm lint-staged",
+        "commit-msg": "pnpm commitlint --edit \"$1\"",
+        "pre-push": "pnpm typecheck"
+    },
+    "lint-staged": {
+        "*": [
+            "oxlint --fix --deny-warnings --no-error-on-unmatched-pattern",
+            "oxfmt --no-error-on-unmatched-pattern"
+        ]
+    },
+    "engines": {
+        "node": "24.x"
+    },
+    "packageManager": "pnpm@12.21.0"
+}

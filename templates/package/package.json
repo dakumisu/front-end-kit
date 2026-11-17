@@ -1,0 +1,29 @@
+{
+    "name": "@dakumisu/{{id}}",
+    "version": "0.1.0",
+    "description": "{{description}}",
+    "license": "MIT",
+    "author": "dakumisu",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dakumisu/toolkit-monorepo.git",
+        "directory": "packages/{{id}}"
+    },
+    "files": [
+        "dist"
+    ],
+    "type": "module",
+    "sideEffects": false,
+    "imports": {
+        "#*": "./src/*"
+    },
+    "exports": {},
+    "publishConfig": {
+        "exports": {},
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsdown",
+        "typecheck": "tsc --noEmit"
+    }
+}

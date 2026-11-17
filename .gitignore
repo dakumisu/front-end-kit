@@ -1,1 +1,8 @@
 .claude/grill/
+node_modules
+dist
+.astro
+*.tgz
+.claude/*
+!.claude/settings.json
+!.claude/skills/

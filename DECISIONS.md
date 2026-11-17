@@ -41,7 +41,7 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 - ✅ **tsdown builds packages.** Rolldown, fast `.d.ts` via oxc. Still 0.x, expect minor breaking bumps.
     - ❌ tsup: maintenance mode, slower dts.
     - ❌ Vite lib mode + tsc: dts needs a plugin.
-- ✅ **TypeScript 7 with `isolatedDeclarations`.** Every export carries explicit types, so dts never needs the tsc JS API.
+- ✅ **TypeScript 7 with `isolatedDeclarations`.** Every export carries explicit types, so dts never needs the tsc JS API. Proven 2026-11-16 with tsdown 0.23.7: `#*` imports become relative `.js` paths in both `.js` and `.d.ts`, and publint + attw (`level: 'error'`) pass.
     - ❌ TS 7 without it: tsdown would need the tsc JS API, absent in TS 7.
     - ❌ TS 5.9: older line.
 - ✅ **Packages target modern browsers** (ES2022+, DOM lib). SSR guards only where a package needs them.
@@ -54,7 +54,9 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 
 - ✅ **oxlint + oxfmt with astro-boilerplate's config.** 4 spaces, single quotes, print width 100. Boilerplate bits that don't apply here (layouts import group, Tailwind sorting) are dropped; `.astro` options stay for the playground.
     - ❌ ESLint + Prettier (canvas-manager): older stack, conflicting trailing-comma rules.
-- ✅ **Type-aware oxlint** (tsgolint). Catches unawaited promises in published code.
+- ✅ **oxfmt skips the root project docs** (DECISIONS, PROGRESS, TODO, ROADMAP) *(user, 2026-11-16)*. oxfmt rewrites `*(user)*` markers to `_(user)_`. READMEs are still formatted.
+    - ❌ Switch markers to `_(user)_`: breaks the convention used across projects.
+- ✅ **Type-aware oxlint** (tsgolint), switched on in `oxlint.config.ts`. Catches unawaited promises in published code. tsgolint 7.0.2007 runs on TS 7.0.2 (checked 2026-11-16).
     - ❌ Boilerplate rules only: misses async bugs.
 - ✅ **Rule levels match the boilerplate; `--deny-warnings` in hooks and CI.** Nothing warned ships, config stays aligned.
     - ❌ Promote rules to error: config drifts from boilerplate.
@@ -71,7 +73,7 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 - ✅ **Grouped packages with subpath exports.** Small utils share a package; plugins and tools get their own.
     - ❌ One package per util: many tiny releases.
     - ❌ Single kit package: breaks `@dakumisu/{id}` naming.
-- ✅ **tsdown writes `exports` from its entry list.** Entries declared once.
+- ✅ **tsdown writes `exports` from its entry list.** Entries declared once. The dev condition lives in `exports`; `publishConfig.exports` replaces it at pack time, so the tarball points only at `dist/` (checked 2026-11-16). The `imports` field ships but nothing in `dist/` uses it; publint accepts it.
     - ❌ Hand-written exports: two places to sync.
 - ✅ **Grouped packages expose subpaths only, no root barrel.**
     - ❌ Barrel + subpaths: dev-server cost, relies on `sideEffects`.
@@ -136,7 +138,4 @@ Personal front-end toolkit: `packages/` published as `@dakumisu/{package_id}`, `
 
 | # | Question | Blocks |
 | --- | --- | --- |
-| 1 | Do tsdown 0.23 + TS 7 emit correct `.d.ts` (including `#` subpath imports inside packages)? | Package build |
-| 2 | Does `devExports` + `publishConfig` leave only `dist/` exports in the packed tarball? | First publish |
-| 3 | Does oxlint-tsgolint run with TS 7? | Type-aware lint |
 | 5 | Should reactivity eventually replace or wrap nanostores-style APIs (`subscribe`) for interop? | Nothing yet |

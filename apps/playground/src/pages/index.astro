@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+
+// One page per package; a new `<id>.astro` shows up here with no edit.
+const pages = Object.keys(import.meta.glob(['./*.astro', '!./index.astro']))
+    .map((path) => path.slice(2, -'.astro'.length))
+    .toSorted();
+---
+
+<Base title="Playground">
+    <h1>Playground</h1>
+    {pages.length > 0 ? (
+        <ul>
+            {pages.map((id) => <li>
+                <a href={`/${id}`}>{id}</a>
+            </li>)}
+        </ul>
+    ) : (
+        <p>No package pages yet.</p>
+    )}
+</Base>
