@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="reactivity">
+    <h1>@dakumisu/reactivity</h1>
+    <p>Count: <output id="count">0</output>, double: <output id="double">0</output></p>
+    <button type="button" id="increment" disabled>Increment</button>
+    <ul id="log" aria-live="polite"></ul>
+</Base>
+
+<script>
+    import { computed, watch, writable } from '@dakumisu/reactivity';
+
+    const $count = document.querySelector<HTMLOutputElement>('#count');
+    const $double = document.querySelector<HTMLOutputElement>('#double');
+    const $increment = document.querySelector<HTMLButtonElement>('#increment');
+    const $log = document.querySelector<HTMLUListElement>('#log');
+
+    if ($count && $double && $increment && $log) {
+        const count = writable(0);
+        const double = computed(count, ([value]) => value * 2);
+
+        count.watch((value) => {
+            $count.value = String(value);
+        });
+        double.watch((value) => {
+            $double.value = String(value);
+        });
+        watch([count, double], ([value, doubled]) => {
+            const $line = document.createElement('li');
+            $line.textContent = `count ${value}, double ${doubled}`;
+            $log.append($line);
+        });
+
+        $increment.disabled = false;
+        $increment.addEventListener('click', () => {
+            count.value += 1;
+        });
+    }
+</script>

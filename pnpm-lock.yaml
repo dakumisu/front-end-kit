@@ -268,12 +268,17 @@ importers:
 
   apps/playground:
     dependencies:
+      '@dakumisu/reactivity':
+        specifier: workspace:^
+        version: link:../../packages/reactivity
       astro:
         specifier: 'catalog:'
         version: 7.4.12(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1)
       vite:
         specifier: 'catalog:'
         version: 8.3.8(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1)
+
+  packages/reactivity: {}
 
 packages:
 

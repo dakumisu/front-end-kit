@@ -1,0 +1,38 @@
+{
+    "name": "@dakumisu/reactivity",
+    "version": "0.1.0",
+    "description": "Small signal and store primitives",
+    "license": "MIT",
+    "author": "dakumisu",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dakumisu/toolkit-monorepo.git",
+        "directory": "packages/reactivity"
+    },
+    "files": [
+        "dist"
+    ],
+    "type": "module",
+    "sideEffects": false,
+    "imports": {
+        "#*": "./src/*"
+    },
+    "exports": {
+        ".": {
+            "@dakumisu/source": "./src/index.ts",
+            "default": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "publishConfig": {
+        "exports": {
+            ".": "./dist/index.js",
+            "./package.json": "./package.json"
+        },
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsdown",
+        "typecheck": "tsc --noEmit"
+    }
+}
